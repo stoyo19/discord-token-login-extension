@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Portfolio font: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+
+      /* ── Portfolio Design Tokens ── */
+      :root {
+        --bg-color: #050507;
+        --bg-card: rgba(10, 10, 12, 0.6);
+        --bg-card-hover: rgba(16, 16, 20, 0.85);
+        --border-color: rgba(255, 255, 255, 0.05);
+        --border-hover: rgba(255, 255, 255, 0.15);
+        --accent-primary: #f5f5f7;
+        --accent-secondary: #a1a1aa;
+        --font-sans: 'Outfit', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        width: 320px;
+        padding: 20px;
+        font-family: var(--font-sans);
+        text-align: center;
+        background-color: var(--bg-color);
+        color: #e4e4e7;
+        border-radius: 16px;
+        overflow: hidden;
+        /* Ambient radial backdrops from portfolio */
+        background-image:
+          radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.015), transparent 40%),
+          radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.015), transparent 40%);
+      }
+
+      /* ── Glassmorphic Card (spotlight-card style) ── */
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 1.25rem;
+        padding: 24px 20px;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.4s ease, background-color 0.4s ease;
+      }
+
+      .card:hover {
+        border-color: rgba(255, 255, 255, 0.25);
+        background-color: var(--bg-card-hover);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.03);
+      }
+
+      /* Radial spotlight glow behind card content */
+      .card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          200px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+          rgba(255, 255, 255, 0.08),
+          transparent 80%
+        );
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .card:hover::before {
+        opacity: 1;
+      }
+
+      /* ── Sweeping Border Beam ── */
+      .border-beam {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+        animation: beamSweep 4s linear infinite;
+        pointer-events: none;
+        z-index: 10;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+      }
+
+      @keyframes beamSweep {
+        0%   { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+
+      /* ── Heading with gradient shine ── */
+      h3 {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(135deg, #ffffff 10%, var(--accent-secondary) 50%, #4b5563 90%);
+        background-size: 200% auto;
+        animation: gradientShine 8s linear infinite;
+      }
+
+      @keyframes gradientShine {
+        0%   { background-position: 0% center; }
+        50%  { background-position: 100% center; }
+        100% { background-position: 0% center; }
+      }
+
+
+      /* ── Token Input Field ── */
+      .input-group {
+        text-align: left;
+        margin-bottom: 16px;
+      }
+
+      .input-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--accent-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 10px 14px;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        color: #e4e4e7;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .input-group input::placeholder {
+        color: rgba(161, 161, 170, 0.4);
+      }
+
+      .input-group input:focus {
+        border-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
+      }
+
+      /* ── HUD Glass Button ── */
+      .btn-login {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 20px;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--bg-color);
+        background: #ffffff;
+        border: 1px solid #ffffff;
+        border-radius: 999px;
+        cursor: pointer;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        transition: all 0.6s ease;
+      }
+
+      .btn-login:hover::before {
+        left: 100%;
+      }
+
+      .btn-login:hover {
+        background: transparent;
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #a1a1aa;
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: none;
+      }
+
+      .btn-secondary:hover {
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+
+      /* ── Error/Status Message ── */
+      #errorMessage {
+        font-size: 11px;
+        margin-bottom: 12px;
+        min-height: 14px;
+        color: #ef4444; /* red */
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+      
+      .input-error {
+        border-color: #ef4444 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <!-- Laser sweep top border beam -->
+      <div class="border-beam"></div>
+      <h3>Discord Token Login</h3>
+      <div class="input-group">
+        <label for="tokenInput">Enter Token</label>
+        <input type="text" id="tokenInput" placeholder="Paste your token here...">
+      </div>
+      <div id="errorMessage"></div>
+      <button id="loginBtn" class="btn-login">Login</button>
+      
+      <div style="margin-top: 10px;">
+        <button id="getTokenBtn" class="btn-login btn-secondary" style="padding: 8px 16px; font-size: 12px;">Get Current Token</button>
+      </div>
+
+      <div id="tokenResultContainer" style="display: none; margin-top: 16px; text-align: left; animation: fadeIn 0.3s ease;">
+        <label for="retrievedToken" style="display: block; font-size: 11px; font-weight: 500; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Your Token</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="retrievedToken" readonly style="flex: 1; padding: 8px 12px; font-family: var(--font-sans); font-size: 12px; color: #e4e4e7; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 8px; outline: none; min-width: 0;">
+          <button id="copyTokenBtn" class="btn-login" style="width: auto; padding: 8px 12px; border-radius: 8px; min-width: 60px;">Copy</button>
+        </div>
+      </div>
+
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
